@@ -4,26 +4,46 @@ datos requeridos se encuentran en el archivo data.csv. En este laboratorio
 solo puede utilizar las funciones y librerias basicas de python. No puede
 utilizar pandas, numpy o scipy.
 """
+import csv
+import os
+nombre_archivo = "files\input\data.csv"
 
 
 def pregunta_08():
-    """
-    Genere una lista de tuplas, donde el primer elemento de cada tupla
-    contiene  el valor de la segunda columna; la segunda parte de la tupla
-    es una lista con las letras (ordenadas y sin repetir letra) de la
-    primera  columna que aparecen asociadas a dicho valor de la segunda
-    columna.
+    if not os.path.exists(nombre_archivo):
+        return f"Error: No se pudo encontrar el archivo '{nombre_archivo}'. Por favor, verifica la ruta."
 
-    Rta/
-    [(0, ['C']),
-     (1, ['B', 'E']),
-     (2, ['A', 'E']),
-     (3, ['A', 'B', 'D', 'E']),
-     (4, ['B', 'E']),
-     (5, ['B', 'C', 'D', 'E']),
-     (6, ['A', 'B', 'C', 'E']),
-     (7, ['A', 'C', 'D', 'E']),
-     (8, ['A', 'B', 'D', 'E']),
-     (9, ['A', 'B', 'C', 'E'])]
+    letras_unicas_por_valor = {}
+    
+    with open(nombre_archivo, mode='r', newline='', encoding='utf-8') as file:
+        
+        reader = csv.reader(file, delimiter='\t')
+        
+        for fila in reader:
+            if len(fila) >= 2:
+                letra = fila[0].strip()     
+                valor_str = fila[1].strip() 
+                
+                if letra and valor_str and letra.isalpha():
+                    try:
+                        valor_numerico = int(valor_str)
+                        
+                        if valor_numerico not in letras_unicas_por_valor:
+                            letras_unicas_por_valor[valor_numerico] = set()
+                            
+                        letras_unicas_por_valor[valor_numerico].add(letra)
+                        
+                    except ValueError:
+                        pass
+            
+    resultado = []
+    for valor, set_letras in letras_unicas_por_valor.items():
+        lista_letras = list(set_letras)
+        lista_letras.sort()
+        
+        resultado.append((valor, lista_letras))
+        
+    resultado_ordenado = sorted(resultado, key=lambda item: item[0])
+    
+    return resultado_ordenado
 
-    """
