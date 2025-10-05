@@ -6,7 +6,7 @@ utilizar pandas, numpy o scipy.
 """
 import csv
 import os
-nombre_archivo = "files\input\data.csv"
+nombre_archivo = "files/input/data.csv"
 
 
 def pregunta_06():
